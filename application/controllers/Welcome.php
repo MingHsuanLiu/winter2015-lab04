@@ -25,7 +25,7 @@ class Welcome extends Application {
 
         // Get all the completed orders
         //FIXME
-        // added variable $completed to contain the order data
+        // added variable $completed to contain the order data 
         $completed = $this->orders->some('status', 'c');
 
 
