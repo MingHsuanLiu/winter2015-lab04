@@ -39,8 +39,8 @@ class Order extends Application {
         $this->data['order_num'] = $order_num;
         //FIXME
         // added title for order that retrive the order by $order_num
-        
-        $this->data['title'] = "Order # " . $order_num;
+        $price = $this->orders->total($order_num);
+        $this->data['title'] = "Order # " . $order_num . " ($" . $price  . ")";
 
         // Make the columns
         $this->data['meals'] = $this->make_column('m');
@@ -103,22 +103,26 @@ class Order extends Application {
         }
         
         $this->data['items'] = $items;
+        if ($this->orders->validate($order_num) == false) {
+            $this->data['okornot'] = "disabled";
+        }
+        else {
+            $this->data['okornot'] = "";
+        }
         $this->render();
     }
 
     // proceed with checkout
-    function proceed($order_num) {
+    function commit($order_num) {
         //FIXME
         // valided order and be checkeout
-        if (!$this->orders->validate($order_num)){
-            redirect('/order/display_menu' . $order_num);
-        }  else {
-            $record = $this->orders->get($order_num);
-            $record->date = date(DATE_ATOM);
-            $record->status = 'c';
-            $record->total = $this->orders->total($order_num);
-            $this->orders->update($record);
-        }
+        if(!$this->orders->validate($order_num))
+            redirect('/order/display_menu/' . $order_num);
+        $record = $this->orders->get($order_num);
+        $record->date = date(DATE_ATOM);
+        $record->status = 'c';
+        $record->total = $this->orders->total($order_num);
+        $this->orders->update($record);
         
         redirect('/');
     }

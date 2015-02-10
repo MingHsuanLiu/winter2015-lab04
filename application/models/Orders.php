@@ -36,13 +36,13 @@ class Orders extends MY_Model {
         $CI->load->model('orderitems');
 
         // get all the items in the order by calling some('code',$num)
-        $items = $this->orderitems->some('code', $num);
+        $items = $this->orderitems->some('order', $num);
 
         // used foreach loop to iterate all the item in items and add them up
-        $result = 0;
+        $result = 0.0;
         foreach ($items as $item) {
             $menuitem = $this->menu->get($item->item);
-            $result = $item->quantity * $menuitem->price;
+            $result = $result + $item->quantity * $menuitem->price;
         }
 
         // return total amount of items in the order
@@ -64,15 +64,17 @@ class Orders extends MY_Model {
     function validate($num) {
         $CI = &get_instance();
         $items = $CI->orderitems->group($num);
-        
         $gotem = array();
-        if (count($items) > 0) {
-            foreach($items as $item) {
+        if(count($items) > 0)
+        {
+            foreach($items as $item)
+            {
                 $menu = $CI->menu->get($item->item);
                 $gotem[$menu->category] = 1;
             }
         }
-        return isset($gotem['m']) && isset($gotem['d']) && isset($gotem['s']);
+        
+        return (isset($gotem['m']) && isset($gotem['d']) && isset($gotem['s']));
     }
 
 }
