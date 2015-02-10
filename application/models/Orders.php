@@ -42,7 +42,7 @@ class Orders extends MY_Model {
         $result = 0;
         foreach ($items as $item) {
             $menuitem = $this->menu->get($item->item);
-            $results = $item->quantity * $menuitem->price;
+            $result = $item->quantity * $menuitem->price;
         }
 
         // return total amount of items in the order

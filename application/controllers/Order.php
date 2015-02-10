@@ -39,7 +39,7 @@ class Order extends Application {
         $this->data['order_num'] = $order_num;
         //FIXME
         // added title for order that retrive the order by $order_num
-       // $total = money_format($this->orders->total($order_num),2);
+        
         $this->data['title'] = "Order # " . $order_num;
 
         // Make the columns
